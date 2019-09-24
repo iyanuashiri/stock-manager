@@ -4,6 +4,8 @@ from django.contrib.auth.models import PermissionsMixin
 from django.core.mail import send_mail
 from django.utils.translation import gettext_lazy as _
 
+from .managers import AccountManager
+
 # Create your models here.
 
 
@@ -32,6 +34,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
         default=False,
         help_text=_('Designates whether the user can log into the admin site.'),
     )
+
+    objects = AccountManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name']
