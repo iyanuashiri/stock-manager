@@ -11,7 +11,7 @@ class Stock(models.Model):
     name = models.CharField(max_length=200)
     symbol = models.CharField(max_length=50)
     unit_price = models.CharField()
-    units = models.IntegerField()
+    shares = models.IntegerField()
     total_price = models.CharField()
 
     class Meta:
@@ -23,3 +23,8 @@ class Stock(models.Model):
 
     def get_absolute_url(self):
         return reverse('stocks:stock_detail', kwargs={'pk': self.pk})
+
+    def sell(self, units):
+        self.shares = self.shares - units
+        self.save()
+        return f'{units} sold'
