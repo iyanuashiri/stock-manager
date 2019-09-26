@@ -40,3 +40,26 @@ class StockBuy(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class StockSell(APIView):
+    """
+
+    """
+    def get_object(self, pk):
+        try:
+            return Stock.objects.get(pk=pk)
+        except Stock.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, shares):
+        stock = self.get_object(pk)
+        result = stock.sell(shares)
+        serializer = StockSerializer(stock, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, {'result': result})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
