@@ -19,6 +19,7 @@ class Stock(models.Model):
     unit_price = models.CharField()
     shares = models.IntegerField()
     total_price = models.CharField()
+    bought_date = models.DateField(auto_now_add=True)
 
     objects = StockManager()
 
