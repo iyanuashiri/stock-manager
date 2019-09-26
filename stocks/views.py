@@ -25,7 +25,18 @@ class StockList(generics.ListAPIView):
         return stocks
 
 
+class StockBuy(APIView):
+    """
 
-
+    """
+    def post(self, request, symbol, shares):
+        price, company_name = search_stock(symbol)
+        total_price = price * shares
+        stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
+        serializer = StockSerializer(data=stock)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

@@ -5,6 +5,7 @@ from stocks import views
 
 urlpatterns = [
     path('stocks/', views.StockList.as_view()),
+    path('stocks/<symbol>/buy/<shares>/', views.StockBuy.as_view()),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns=urlpatterns)
