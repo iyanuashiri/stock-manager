@@ -35,4 +35,4 @@ class Stock(models.Model):
     def sell(self, units):
         self.shares = self.shares - units
         self.save()
-        return f'{units} sold'
+        return f'{self.shares} left'
