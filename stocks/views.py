@@ -60,6 +60,11 @@ class StockSell(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class StockSearch(APIView):
+    """
 
-
+    """
+    def get(self, request, symbol):
+        price, company_name = search_stock(symbol)
+        return Response({'price': price, 'company_name': company_name})
 
