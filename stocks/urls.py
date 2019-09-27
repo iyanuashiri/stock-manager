@@ -5,8 +5,8 @@ from stocks import views
 app_name = 'stocks'
 urlpatterns = [
     path('stocks/', views.StockList.as_view(), name='stock-list'),
-    path('stocks/<symbol>/buy/<shares>/', views.StockBuy.as_view(), name='stock-buy'),
-    path('stocks/<symbol>/sell/<shares>/', views.StockSell.as_view(), name='stock-sell'),
+    path('stocks/<symbol>/buy/<int:shares>/', views.StockBuy.as_view(), name='stock-buy'),
+    path('stocks/<symbol>/sell/<int:shares>/', views.StockSell.as_view(), name='stock-sell'),
     path('stocks/<symbol>/search/', views.StockSearch.as_view(), name='stock-search'),
 ]
 
