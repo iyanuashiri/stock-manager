@@ -16,9 +16,9 @@ class Stock(models.Model):
     owner = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='stocks')
     name = models.CharField(max_length=200)
     symbol = models.CharField(max_length=50)
-    unit_price = models.CharField()
+    unit_price = models.IntegerField()
     shares = models.IntegerField()
-    total_price = models.CharField()
+    total_price = models.IntegerField()
     bought_date = models.DateField(auto_now_add=True)
 
     objects = StockManager()
