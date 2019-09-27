@@ -36,3 +36,8 @@ class TestStockList(APITestCase):
         response = self.client.put(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
+    @pytest.mark.django_db
+    def test_stock_search(self):
+        url = reverse('stock-search', kwargs='ZOOM')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
