@@ -34,7 +34,7 @@ class StockBuy(APIView):
         total_price = price * shares
         stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
         serializer = StockSerializer(data=stock)
-        if serializer.is_valid():
+        if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -53,7 +53,7 @@ class StockSell(APIView):
     def put(self, request, pk, shares, format=None):
         stock = self.get_object(pk)
         result = stock.sell(shares)
-        serializer = StockSerializer(stock, data=request.data)
+        serializer = StockSerializer(stock, data=request.data, context={'result': result})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
