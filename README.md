@@ -14,7 +14,7 @@ This project has three basic apps.
   - List all stocks bought by a user
   - Search for a stock
 * Transactions
-  - List of Transactions by a user
+  - List all transactions by a user
   
 
 # Technology Stack
