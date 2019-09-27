@@ -3,9 +3,9 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 from transactions import views
 
-app_name = 'actions'
+app_name = 'transactions'
 urlpatterns = [
-    path('actions/', views.TransactionList.as_view(), name='action-list'),
+    path('transactions/', views.TransactionList.as_view(), name='transaction-list'),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
