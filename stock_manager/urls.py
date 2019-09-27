@@ -24,12 +24,12 @@ from drf_yasg import openapi
 
 schema_view = get_schema_view(
    openapi.Info(
-      title="Gather API Documentation",
+      title="Stock Manager API Documentation",
       default_version='v1',
-      description="Test description",
+      description="Stock manager is an app for managing buying and selling of stocks in the financial markets.",
       terms_of_service="https://www.google.com/policies/terms/",
-      contact=openapi.Contact(email="contact@snippets.local"),
-      license=openapi.License(name="BSD License"),
+      contact=openapi.Contact(email="ajaoiyanu@gmail.com"),
+      license=openapi.License(name="MIT License"),
    ),
    public=True,
    permission_classes=(permissions.AllowAny,),
