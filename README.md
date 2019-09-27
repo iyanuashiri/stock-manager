@@ -43,7 +43,11 @@ Run server
 ```python
 $ python manage.py runserver
 ```
+Application URL
+http://localhost:8080/
 
+API Documentation link
+http://localhost:8080/swagger
 
 ### Test coverage
 To run the tests, check your test coverage, and generate a simplified coverage report:
