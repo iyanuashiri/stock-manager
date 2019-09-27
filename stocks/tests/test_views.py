@@ -27,3 +27,12 @@ class TestStockList(APITestCase):
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
+    @pytest.mark.django_db
+    def test_stock_sell(self):
+        url = reverse('stock-sell', kwargs={'pk': StockFactory.id, 'shares': StockFactory.shares})
+        account = AccountFactory()
+        stock = StockFactory(owner=account)
+        data = StockSerializer(stock)
+        response = self.client.put(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
