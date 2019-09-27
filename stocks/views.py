@@ -13,8 +13,10 @@ from .serializers import StockSerializer
 
 
 class StockList(generics.ListAPIView):
-    """
+    """Lists all stocks purchased by a user
 
+    :returns: list of stock objects.
+    :rtype: JSON
     """
     queryset = Stock.objects.all()
     serializer_class = StockSerializer
@@ -26,8 +28,16 @@ class StockList(generics.ListAPIView):
 
 
 class StockBuy(APIView):
-    """
+    """Buy shares of a stock
 
+    :param symbol: The symbol of the stock the user wants to buy
+    :type symbol: str
+
+    :param shares: The units of stock the user wants to buy
+    :type shares: int
+
+    :returns: the stock object bought
+    :rtype: JSON
     """
     def post(self, request, symbol, shares, format=None):
         price, company_name = search_stock(symbol)
@@ -41,8 +51,16 @@ class StockBuy(APIView):
 
 
 class StockSell(APIView):
-    """
+    """Sell shares of a stock.
 
+    :param pk: The primary key of the stock the user wants to sell
+    :type pk: int
+
+    :param shares: The units of stock the user wants to buy
+    :type shares: int
+
+    :returns: updated stock object sold and a string showing shares of stock left
+    :rtype: JSON
     """
     def get_object(self, pk):
         try:
@@ -61,8 +79,13 @@ class StockSell(APIView):
 
 
 class StockSearch(APIView):
-    """
+    """Search for a stock
 
+    :param symbol: The symbol of the stock the user wants to buy
+    :type symbol: str
+
+    :returns: object of search result
+    :rtype: JSON
     """
     def get(self, request, symbol, format=None):
         price, company_name = search_stock(symbol)
