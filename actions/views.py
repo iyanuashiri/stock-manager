@@ -19,3 +19,13 @@ class ActionList(generics.ListAPIView):
     def get_queryset(self):
         actions = self.queryset.filter(user=self.request.user)
         return actions
+
+
+class ActionListByDate(APIView):
+    """
+
+    """
+    def get(self, request, date=None, format=None):
+        actions = Action.objects.filter(user=self.request.user, created=date)
+        serializer = ActionSerializer(actions)
+        return Response(serializer.data)
