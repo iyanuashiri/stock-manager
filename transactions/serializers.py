@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from .models import Action
+from .models import Transaction
 
 
-class ActionSerializer(serializers.HyperlinkedModelSerializer):
-    url = serializers.HyperlinkedRelatedField(read_only=True, view_name='actions:action-detail')
+class TransactionSerializer(serializers.HyperlinkedModelSerializer):
+    url = serializers.HyperlinkedRelatedField(read_only=True, view_name='transactions:transaction-detail')
     user = serializers.HyperlinkedRelatedField(read_only=True, view_name='accounts:account-detail')
 
     class Meta:
-        model = Action
+        model = Transaction
         fields = ('id', 'url', 'user', 'verb', 'created', 'target_ct', 'target_id', 'target')

@@ -4,13 +4,13 @@ import factory
 
 from accounts.factories import AccountFactory
 
-from .models import Action
+from .models import Transaction
 
 
-class ActionFactory(factory.DjangoModelFactory):
+class TransactionFactory(factory.DjangoModelFactory):
 
     class Meta:
-        model = Action
+        model = Transaction
 
     user = factory.SubFactory(AccountFactory)
     verb = factory.Faker('sentences', nb_words=3)

@@ -9,8 +9,8 @@ from django.utils import timezone
 # Create your models here.
 
 
-class Action(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='actions', db_index=True)
+class Transaction(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='transactions', db_index=True)
     verb = models.CharField(max_length=200)
     created = models.DateField(auto_now_add=True, db_index=True)
     target_ct = models.ForeignKey(ContentType, blank=True, null=True, related_name='target_obj', on_delete=models.CASCADE)
@@ -27,14 +27,14 @@ class Action(models.Model):
     def create_action(user, verb, target=None):
         now = timezone.now()
         last_date = now - datetime.timedelta(seconds=60)
-        similar_actions = Action.objects.filter(user_id=user.id, verb=verb, created_gte=last_date)
+        similar_actions = Transaction.objects.filter(user_id=user.id, verb=verb, created_gte=last_date)
 
         if target:
             target_ct = ContentType.objects.get_for_model(target)
             similar_actions = similar_actions.filter(target_ct=target_ct, target_id=target.id)
 
         if not similar_actions:
-            Action.objects.create(user=user, verb=verb, target=target)
+            Transaction.objects.create(user=user, verb=verb, target=target)
             return True
         return False
 
