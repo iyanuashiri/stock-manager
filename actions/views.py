@@ -1,6 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import generics, permissions
+from rest_framework import status
 
 from .models import Action
 from .serializers import ActionSerializer
@@ -8,24 +8,14 @@ from .serializers import ActionSerializer
 # Create your views here.
 
 
-class ActionList(generics.ListAPIView):
+class ActionList(APIView):
     """
 
     """
-    queryset = Action.objects.all()
-    serializer_class = ActionSerializer
-    permission_classes = (permissions.IsAuthenticated,)
-
-    def get_queryset(self):
-        actions = self.queryset.filter(user=self.request.user)
-        return actions
-
-
-class ActionListByDate(APIView):
-    """
-
-    """
-    def get(self, request, date=None, format=None):
-        actions = Action.objects.filter(user=self.request.user, created=date)
+    def get(self, request, *args, **kwargs):
+        actions = Action.objects.filter(user=self.request.user)
+        date = request.query_params.get('date', None)
+        if date is not None:
+            actions.filter(created=date)
         serializer = ActionSerializer(actions)
-        return Response(serializer.data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
