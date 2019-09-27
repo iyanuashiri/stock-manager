@@ -37,3 +37,10 @@ class Action(models.Model):
             Action.objects.create(user=user, verb=verb, target=target)
             return True
         return False
+
+    @staticmethod
+    def parse_date(dates):
+        year = int(dates[0:4])
+        month = int(dates[4:6])
+        day = int(dates[6:8])
+        return datetime.date(year=year, month=month, day=day)
