@@ -34,6 +34,6 @@ class Action(models.Model):
             similar_actions = similar_actions.filter(target_ct=target_ct, target_id=target.id)
 
         if not similar_actions:
-            action = Action.objects.create(user=user, verb=verb, target=target)
+            Action.objects.create(user=user, verb=verb, target=target)
             return True
         return False
