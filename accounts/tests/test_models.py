@@ -1,10 +1,6 @@
 import pytest
-from faker import Faker
 
 from ..factories import AccountFactory
-
-
-fake = Faker()
 
 
 @pytest.mark.django_db
