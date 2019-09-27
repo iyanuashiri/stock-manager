@@ -56,7 +56,7 @@ class StockSell(APIView):
         serializer = StockSerializer(stock, data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response(serializer.data, {'result': result})
+            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -66,5 +66,5 @@ class StockSearch(APIView):
     """
     def get(self, request, symbol, format=None):
         price, company_name = search_stock(symbol)
-        return Response({'price': price, 'company_name': company_name})
+        return Response({'price': price, 'company_name': company_name}, status=status.HTTP_200_OK)
 
