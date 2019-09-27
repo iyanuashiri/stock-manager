@@ -27,7 +27,7 @@ This project has three basic apps.
 
 Clone the repo
 ```python
-$ git clone https://github.com/iyanuashiri/stock-manager
+$ git clone https://github.com/iyanuashiri/stock-manager.git
 
 $ cd stock-manager
 ```
