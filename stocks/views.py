@@ -39,7 +39,7 @@ class StockBuy(APIView):
     :returns: the stock object bought
     :rtype: JSON
     """
-    def post(self, request, symbol, shares, format=None):
+    def post(self, request, symbol, shares):
         price, company_name = search_stock(symbol)
         total_price = price * shares
         stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
@@ -68,7 +68,7 @@ class StockSell(APIView):
         except Stock.DoesNotExist:
             raise Http404
 
-    def put(self, request, pk, shares, format=None):
+    def put(self, request, pk, shares):
         stock = self.get_object(pk)
         result = stock.sell(shares)
         serializer = StockSerializer(stock, data=request.data, context={'result': result})
@@ -87,7 +87,7 @@ class StockSearch(APIView):
     :returns: object of search result
     :rtype: JSON
     """
-    def get(self, request, symbol, format=None):
+    def get(self, request, symbol):
         price, company_name = search_stock(symbol)
         return Response({'price': price, 'company_name': company_name}, status=status.HTTP_200_OK)
 
