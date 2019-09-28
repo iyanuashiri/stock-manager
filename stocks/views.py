@@ -27,7 +27,7 @@ class StockList(generics.ListAPIView):
         return stocks
 
 
-class StockBuy(APIView):
+class StockBuy(generics.CreateAPIView):
     """Buy shares of a stock
 
     :param symbol: The symbol of the stock the user wants to buy
@@ -39,11 +39,14 @@ class StockBuy(APIView):
     :returns: the stock object bought
     :rtype: JSON
     """
-    def post(self, request, symbol, shares):
+    serializer_class = StockSerializer
+
+    def post(self, request, *args, **kwargs):
+        symbol, shares = kwargs['symbol'], kwargs['shares']
         price, company_name = search_stock(symbol)
         total_price = price * shares
         stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
-        serializer = StockSerializer(data=stock)
+        serializer = self.serializer_class(data=stock)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
