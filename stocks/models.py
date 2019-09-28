@@ -37,3 +37,9 @@ class Stock(models.Model):
         self.shares = self.shares - units
         self.save()
         return f'{self.shares} left'
+
+
+class Search:
+    def __init__(self, price, company_name):
+        self.price = price
+        self.company_name = company_name
