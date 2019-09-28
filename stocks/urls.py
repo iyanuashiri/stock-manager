@@ -1,7 +1,6 @@
 from django.urls import path
 
 from rest_framework.schemas import get_schema_view
-from rest_framework.urlpatterns import format_suffix_patterns
 
 from stocks import views
 
@@ -19,4 +18,3 @@ urlpatterns = [
     path('stocks/<symbol>/search/', views.StockSearch.as_view(), name='stock-search'),
 ]
 
-urlpatterns = format_suffix_patterns(urlpatterns=urlpatterns)
