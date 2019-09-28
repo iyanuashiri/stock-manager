@@ -85,7 +85,7 @@ class StockSell(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class StockSearch(APIView):
+class StockSearch(generics.GenericAPIView):
     """Search for a stock
 
     :param symbol: The symbol of the stock the user wants to buy
@@ -94,9 +94,11 @@ class StockSearch(APIView):
     :returns: object of search result
     :rtype: JSON
     """
+    serializer_class = StockSearchSerializer
+
     def get(self, request, symbol):
         price, company_name = search_stock(symbol)
         data = Search(price=price, company_name=company_name)
-        serializer = StockSearchSerializer(data)
+        serializer = self.serializer_class(data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
