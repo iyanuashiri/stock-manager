@@ -1,3 +1,5 @@
+from abc import ABC
+
 from rest_framework import serializers
 
 from .models import Stock
@@ -10,3 +12,8 @@ class StockSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Stock
         fields = ('id', 'url', 'owner', 'name', 'symbol', 'unit_price', 'shares', 'total_price')
+
+
+class StockSearchSerializer(serializers.Serializer):
+    price = serializers.CharField()
+    company_name = serializers.CharField()
