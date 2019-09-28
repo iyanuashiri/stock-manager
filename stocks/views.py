@@ -53,7 +53,7 @@ class StockBuy(generics.CreateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class StockSell(APIView):
+class StockSell(generics.UpdateAPIView):
     """Sell shares of a stock.
 
     :param pk: The primary key of the stock the user wants to sell
@@ -65,16 +65,20 @@ class StockSell(APIView):
     :returns: updated stock object sold and a string showing shares of stock left
     :rtype: JSON
     """
-    def get_object(self, pk):
+    serializer_class = StockSerializer
+
+    def get_object(self):
+        pk = self.lookup_field
         try:
             return Stock.objects.get(pk=pk)
         except Stock.DoesNotExist:
             raise Http404
 
-    def put(self, request, pk, shares):
-        stock = self.get_object(pk)
+    def put(self, request, *args, **kwargs):
+        pk, shares = kwargs['pk'], kwargs['shares']
+        stock = self.get_object()
         result = stock.sell(shares)
-        serializer = StockSerializer(stock, data=request.data, context={'result': result})
+        serializer = self.serializer_class(stock, data=request.data, context={'result': result})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
