@@ -6,8 +6,8 @@ from rest_framework.response import Response
 from rest_framework import status, generics, permissions
 
 from .utils import search_stock
-from .models import Stock
-from .serializers import StockSerializer
+from .models import Stock, Search
+from .serializers import StockSerializer, StockSearchSerializer
 
 # Create your views here.
 
@@ -96,5 +96,7 @@ class StockSearch(APIView):
     """
     def get(self, request, symbol):
         price, company_name = search_stock(symbol)
-        return Response({'price': price, 'company_name': company_name}, status=status.HTTP_200_OK)
+        data = Search(price=price, company_name=company_name)
+        serializer = StockSearchSerializer(data)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
