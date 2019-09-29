@@ -18,4 +18,4 @@ class StockFactory(factory.DjangoModelFactory):
     unit_price = factory.Faker('number')
     shares = factory.Faker('number')
     total_price = factory.LazyAttribute(lambda a: f'{a.unit_price}*{a.shares}')
-    bought_date = factory.LazyAttribute(datetime.now())
+    bought_date = factory.LazyFunction(datetime.now)

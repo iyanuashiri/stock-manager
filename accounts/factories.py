@@ -13,6 +13,6 @@ class AccountFactory(factory.DjangoModelFactory):
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     email = factory.LazyAttribute(lambda a: f'{a.first_name}.{a.last_name}@gmail.com'.lower())
-    date_joined = factory.LazyAttribute(datetime.now())
+    date_joined = factory.LazyFunction(datetime.now)
     is_staff = False
     is_active = True
