@@ -44,6 +44,9 @@ class Account(AbstractBaseUser, PermissionsMixin):
         verbose_name = _('user')
         verbose_name_plural = _('users')
 
+    def __str__(self):
+        return f'{self.get_fullname()}'
+
     def clean(self):
         super().clean()
 
