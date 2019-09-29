@@ -21,7 +21,7 @@ class Transaction(models.Model):
         ordering = ('-created',)
 
     def __str__(self):
-        return f'{self.target_ct} {self.verb}'
+        return f'{self.verb}'
 
     @staticmethod
     def create_action(user, verb, target=None):
