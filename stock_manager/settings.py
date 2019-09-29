@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'drf_yasg',
+    'generic_relations',
 
     'accounts',
     'stocks',
