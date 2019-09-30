@@ -6,6 +6,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics, permissions
 
+from transactions.models import Transaction
 from .utils import search_stock
 from .models import Stock, Search
 from .serializers import StockSerializer, StockSearchSerializer
@@ -48,8 +49,10 @@ class StockBuy(APIView):
         if stock.exists():
             stock = Stock.objects.get(owner=self.request.user, symbol=symbol)
             stock.add_more(shares, price)
+            Transaction.create_transaction(self.request.user, 'bought more stock', stock)
         else:
             stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
+            Transaction.create_transaction(self.request.user, 'bought a stock', stock)
         serializer = StockSerializer(stock, context={'request': request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
@@ -77,6 +80,7 @@ class StockSell(APIView):
         stock = self.get_object(pk)
         price, name = search_stock(stock.symbol)
         stock.sell(shares, int(price))
+        Transaction.create_transaction(self.request.user, 'sold some stock', stock)
         serializer = StockSerializer(stock, context={'request': request})
         return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
