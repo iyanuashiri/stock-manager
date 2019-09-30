@@ -50,6 +50,7 @@ API Documentation link
 http://localhost:8000/swagger/
 
 Available Endpoints
+
 POST http://localhost:8000/auth/users/ - Signup endpoint
 
 POST http://localhost:8000/auth/token/login - Login endpoint
