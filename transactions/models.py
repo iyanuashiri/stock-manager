@@ -24,19 +24,9 @@ class Transaction(models.Model):
         return f'{self.verb}'
 
     @staticmethod
-    def create_action(user, verb, target=None):
-        now = timezone.now()
-        last_date = now - datetime.timedelta(seconds=60)
-        similar_actions = Transaction.objects.filter(user_id=user.id, verb=verb, created_gte=last_date)
-
-        if target:
-            target_ct = ContentType.objects.get_for_model(target)
-            similar_actions = similar_actions.filter(target_ct=target_ct, target_id=target.id)
-
-        if not similar_actions:
-            Transaction.objects.create(user=user, verb=verb, target=target)
-            return True
-        return False
+    def create_transaction(user, verb, target=None):
+        Transaction.objects.create(user=user, verb=verb, target=target)
+        return True
 
     @staticmethod
     def parse_date(dates):
