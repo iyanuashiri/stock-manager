@@ -16,14 +16,15 @@ class TransactionList(generics.ListAPIView):
     :returns: list of transaction objects.
     :rtype: JSON
     """
+    queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
 
-    def get(self, request, *args, **kwargs):
-        start_date = request.query_params.get('start_date', None)
-        end_date = request.query_params.get('end_date', None)
+    def get_queryset(self):
+        start_date = self.request.query_params.get('start_date', None)
+        end_date = self.request.query_params.get('end_date', None)
         if start_date and end_date is not None:
-            actions = Transaction.objects.filter(user=self.request.user, created__range=(Transaction.parse_date(start_date), Transaction.parse_date(end_date)))
+            transactions = self.queryset.filter(user=self.request.user, created__range=(Transaction.parse_date(start_date), Transaction.parse_date(end_date)))
         else:
-            actions = Transaction.objects.filter(user=self.request.user)
-        serializer = self.serializer_class(actions)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+            transactions = self.queryset.filter(user=self.request.user)
+        serializer = TransactionSerializer(transactions)
+        return serializer
