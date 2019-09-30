@@ -49,15 +49,31 @@ http://localhost:8000/
 API Documentation link
 http://localhost:8000/swagger/
 
+Available Endpoints
+POST http://localhost:8000/auth/users/ - Signup endpoint
+
+POST http://localhost:8000/auth/token/login - Login endpoint
+
+POST http://localhost:8000/auth/token/logout - Logout endpoint
+
+GET http://localhost:8000/stocks - List of stocks by a user 
+
+POST http://localhost:8000/stocks/{symbol}/buy/{shares}/ - Buy stocks
+
+PUT http://localhost:8000/stocks/{id}/sell/{shares}/ - Sell stocks
+
+GET http://localhost:8000/stocks/{symbol}/search/ - Search for a stock
+
+GET http://localhost:8000/transactions/ - List of Transactions
+
+GET http://localhost:8000/transactions/?start_date=YYYYMMDD?end_date=YYYYMMDD/ - Filter List of transactions by date
+
+
+
 ### Test coverage
 To run the tests, check your test coverage, and generate a simplified coverage report:
 
 ```python
 $ pytest
 ```
-To generate an HTML report
 
-```python
-$ coverage html
-$ open htmlcov/index.html
-```
