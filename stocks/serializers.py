@@ -17,3 +17,6 @@ class StockSerializer(serializers.HyperlinkedModelSerializer):
 class StockSearchSerializer(serializers.Serializer):
     price = serializers.CharField()
     company_name = serializers.CharField()
+
+    def create(self, validated_data):
+        return Stock(**validated_data)
