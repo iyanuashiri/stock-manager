@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import Http404
+from django.shortcuts import get_object_or_404
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -27,7 +28,7 @@ class StockList(generics.ListAPIView):
         return stocks
 
 
-class StockBuy(generics.CreateAPIView):
+class StockBuy(APIView):
     """Buy shares of a stock
 
     :param symbol: The symbol of the stock the user wants to buy
@@ -39,21 +40,21 @@ class StockBuy(generics.CreateAPIView):
     :returns: the stock object bought
     :rtype: JSON
     """
-    serializer_class = StockSerializer
-
-    def post(self, request, *args, **kwargs):
-        symbol, shares = kwargs['symbol'], kwargs['shares']
+    def post(self, request, symbol, shares):
+        symbol, shares = symbol, shares
         price, company_name = search_stock(symbol)
         total_price = int(price) * int(shares)
-        stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
-        serializer = self.serializer_class(data=stock)
-        if serializer.is_valid(raise_exception=True):
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        stock = Stock.objects.filter(owner=self.request.user, symbol=symbol)
+        if stock.exists():
+            stock = Stock.objects.get(owner=self.request.user, symbol=symbol)
+            stock.add_more(shares, price)
+        else:
+            stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
+        serializer = StockSerializer(stock, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
-class StockSell(generics.UpdateAPIView):
+class StockSell(APIView):
     """Sell shares of a stock.
 
     :param pk: The primary key of the stock the user wants to sell
@@ -62,30 +63,25 @@ class StockSell(generics.UpdateAPIView):
     :param shares: The units of stock the user wants to buy
     :type shares: int
 
-    :returns: updated stock object sold and a string showing shares of stock left
-    :rtype: JSON
+    :returns: No content
+    :rtype: None
     """
-    serializer_class = StockSerializer
-
-    def get_object(self):
-        pk = self.lookup_field
+    def get_object(self, pk):
         try:
             return Stock.objects.get(pk=pk)
         except Stock.DoesNotExist:
             raise Http404
 
-    def put(self, request, *args, **kwargs):
-        pk, shares = kwargs['pk'], kwargs['shares']
-        stock = self.get_object()
-        result = stock.sell(shares)
-        serializer = self.serializer_class(stock, data=request.data, context={'result': result})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def put(self, request, pk, shares):
+        pk, shares = pk, shares
+        stock = self.get_object(pk)
+        price, name = search_stock(stock.symbol)
+        stock.sell(shares, int(price))
+        serializer = StockSerializer(stock, context={'request': request})
+        return Response(serializer.data, status=status.HTTP_204_NO_CONTENT)
 
 
-class StockSearch(generics.GenericAPIView):
+class StockSearch(APIView):
     """Search for a stock
 
     :param symbol: The symbol of the stock the user wants to buy
@@ -94,11 +90,9 @@ class StockSearch(generics.GenericAPIView):
     :returns: object of search result
     :rtype: JSON
     """
-    serializer_class = StockSearchSerializer
-
     def get(self, request, symbol):
         price, company_name = search_stock(symbol)
         data = Search(price=price, company_name=company_name)
-        serializer = self.serializer_class(data)
+        serializer = StockSearchSerializer(data)
         return Response(serializer.data, status=status.HTTP_200_OK)
 

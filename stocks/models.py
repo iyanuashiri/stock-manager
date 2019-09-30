@@ -33,8 +33,17 @@ class Stock(models.Model):
     def get_absolute_url(self):
         return reverse('stocks:stock_detail', kwargs={'pk': self.pk})
 
-    def sell(self, units):
+    def sell(self, units, current_price):
         self.shares = int(self.shares) - units
+        self.unit_price = current_price
+        self.total_price = self.unit_price * self.shares
+        self.save()
+        return f'{self.shares} left'
+
+    def add_more(self, units, current_price):
+        self.shares = int(self.shares) + units
+        self.unit_price = current_price
+        self.total_price = self.unit_price * self.shares
         self.save()
         return f'{self.shares} left'
 
