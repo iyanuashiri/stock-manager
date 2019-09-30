@@ -13,9 +13,9 @@ class StockFactory(factory.DjangoModelFactory):
         model = Stock
 
     owner = factory.SubFactory(AccountFactory)
-    name = factory.Faker('name')
-    symbol = factory.Faker('name')
-    unit_price = factory.Faker('number')
-    shares = factory.Faker('number')
-    total_price = factory.LazyAttribute(lambda a: f'{a.unit_price}*{a.shares}')
+    name = 'ZOOM'
+    symbol = 'ZOOM'
+    unit_price = 50
+    shares = 1000
+    total_price = factory.LazyAttribute(lambda a: a.unit_price*a.shares)
     bought_date = factory.LazyFunction(datetime.now)
