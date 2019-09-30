@@ -9,13 +9,12 @@ def test_stock_model():
     account = AccountFactory()
     stock = StockFactory(owner=account)
 
-    assert stock.owner == StockFactory.owner
-    assert stock.name == StockFactory.name
-    assert stock.symbol == StockFactory.symbol
-    assert stock.unit_price == StockFactory.unit_price
-    assert stock.shares == StockFactory.shares
-    assert stock.total_price == StockFactory.total_price
-    assert stock.bought_date == StockFactory.bought_date
+    assert stock.owner == account
+    assert stock.name == 'ZOOM'
+    assert stock.symbol == 'ZOOM'
+    assert stock.unit_price == 50
+    assert stock.shares == 1000
+    assert stock.total_price == 50000
 
 
 @pytest.mark.django_db
@@ -23,13 +22,13 @@ def test_stock_field_label():
     account = AccountFactory()
     stock = StockFactory(owner=account)
 
-    assert stock._meta.get_field('owner') == 'owner'
-    assert stock._meta.get_field('name') == 'name'
-    assert stock._meta.get_field('symbol') == 'symbol'
-    assert stock._meta.get_field('unit_price') == 'unit_price'
-    assert stock._meta.get_field('shares') == 'shares'
-    assert stock._meta.get_field('total_price') == 'total_price'
-    assert stock._meta.get_field('bought_date') == 'bought_date'
+    assert stock._meta.get_field('owner').verbose_name == 'owner'
+    assert stock._meta.get_field('name').verbose_name == 'name'
+    assert stock._meta.get_field('symbol').verbose_name == 'symbol'
+    assert stock._meta.get_field('unit_price').verbose_name == 'unit price'
+    assert stock._meta.get_field('shares').verbose_name == 'shares'
+    assert stock._meta.get_field('total_price').verbose_name == 'total price'
+    assert stock._meta.get_field('bought_date').verbose_name == 'bought date'
 
 
 @pytest.mark.django_db
@@ -40,4 +39,3 @@ def test_stock_field_attributes():
     assert stock._meta.get_field('name').max_length == 200
     assert stock._meta.get_field('symbol').max_length == 50
 
-    assert stock._meta.get_field('owner').related_name == 'stocks'
