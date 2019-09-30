@@ -69,16 +69,16 @@ class StockSell(APIView):
     :returns: No content
     :rtype: None
     """
-    def get_object(self, pk):
+    def get_object(self, symbol):
         try:
-            return Stock.objects.get(pk=pk)
+            return Stock.objects.get(symbol=symbol)
         except Stock.DoesNotExist:
             raise Http404
 
-    def put(self, request, pk, shares):
-        pk, shares = pk, shares
-        stock = self.get_object(pk)
-        price, name = search_stock(stock.symbol)
+    def put(self, request, symbol, shares):
+        symbol, shares = symbol, shares
+        stock = self.get_object(symbol)
+        price, name = search_stock(symbol)
         stock.sell(shares, int(price))
         Transaction.create_transaction(self.request.user, 'sold some stock', stock)
         serializer = StockSerializer(stock, context={'request': request})
