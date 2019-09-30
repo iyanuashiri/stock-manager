@@ -44,7 +44,7 @@ class StockBuy(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         symbol, shares = kwargs['symbol'], kwargs['shares']
         price, company_name = search_stock(symbol)
-        total_price = price * shares
+        total_price = int(price) * int(shares)
         stock = Stock.objects.buy_stock(owner=self.request.user, name=company_name, symbol=symbol, unit_price=price, shares=shares, total_price=total_price)
         serializer = self.serializer_class(data=stock)
         if serializer.is_valid(raise_exception=True):

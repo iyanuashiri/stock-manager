@@ -6,28 +6,26 @@ from ..factories import TransactionFactory
 
 
 @pytest.mark.django_db
-def test_action_model():
+def test_transaction_model():
     account = AccountFactory()
-    action = TransactionFactory(user=account)
+    transaction = TransactionFactory(user=account, verb='buy')
 
-    assert action.user == TransactionFactory.user
-    assert action.verb == TransactionFactory.verb
-    assert action.created == TransactionFactory.created
+    assert transaction.user == account
 
 
 @pytest.mark.django_db
-def test_action_field_labels():
+def test_transaction_field_labels():
     account = AccountFactory()
-    action = TransactionFactory(user=account)
+    transaction = TransactionFactory(user=account, verb='buy')
 
-    assert action._meta.get_field('user') == 'user'
-    assert action._meta.get_field('verb') == 'verb'
-    assert action._meta.get_field('created') == 'created'
+    assert transaction._meta.get_field('user').verbose_name == 'user'
+    assert transaction._meta.get_field('verb').verbose_name == 'verb'
+    assert transaction._meta.get_field('created').verbose_name == 'created'
 
 
 @pytest.mark.django_db
-def test_action_field_attributes():
+def test_transaction_field_attributes():
     account = AccountFactory()
-    action = TransactionFactory(user=account)
+    transaction = TransactionFactory(user=account)
 
-    assert action._meta.get_field('verb').max_length == 200
+    assert transaction._meta.get_field('verb').max_length == 200
