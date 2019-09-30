@@ -61,7 +61,7 @@ GET http://localhost:8000/stocks - List of stocks by a user
 
 POST http://localhost:8000/stocks/{symbol}/buy/{shares}/ - Buy stocks
 
-PUT http://localhost:8000/stocks/{id}/sell/{shares}/ - Sell stocks
+PUT http://localhost:8000/stocks/{symbol}/sell/{shares}/ - Sell stocks
 
 GET http://localhost:8000/stocks/{symbol}/search/ - Search for a stock
 
