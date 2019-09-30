@@ -34,7 +34,7 @@ class Stock(models.Model):
         return reverse('stocks:stock_detail', kwargs={'pk': self.pk})
 
     def sell(self, units):
-        self.shares = self.shares - units
+        self.shares = int(self.shares) - units
         self.save()
         return f'{self.shares} left'
 
