@@ -5,17 +5,15 @@ import factory
 from ..factories import AccountFactory
 
 
-# @pytest.mark.django_db
-# def test_account_model():
-#     account = AccountFactory()
-#
-#     assert account.first_name == 'Iyanu'
-#     assert account.last_name == 'Iyanu'
-#     assert account.email == 'iyanuajao@gmail.com'
-#     assert account.get_first_name() == 'Iyanu'
-#     assert account.get_fullname() == 'Ajao Iyanu'
-#     assert account.email_user('Hey you', 'Hello Iyanu') is True
-#
+@pytest.mark.django_db
+def test_account_create():
+    account = AccountFactory()
+
+    assert account.email == f'{account.first_name}.{account.last_name}@gmail.com'.lower()
+    assert account.get_first_name() == account.first_name
+    assert account.get_fullname() == f'{account.last_name} {account.first_name}'
+    assert account.email_user('Hey you', 'Hello Iyanu') == 1
+
 
 @pytest.mark.django_db
 def test_account_label():
