@@ -20,10 +20,10 @@ def test_stock_buy(authenticated):
 
 
 @pytest.mark.django_db
-def test_stock_sell(authenticated):
+def test_stock_sell(authenticated, stock):
     client = authenticated
-    url = reverse('stocks:stock-sell', kwargs={'id': 1, 'shares': 100})
-    response = client.post(url)
+    url = reverse('stocks:stock-sell', kwargs={'symbol': 'ZOOM', 'shares': 100})
+    response = client.put(url)
     assert response.status_code == 204
 
 
