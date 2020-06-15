@@ -1,80 +1,35 @@
 from django.urls import reverse
 
-from rest_framework import status
-from rest_framework.test import APITestCase
-
 import pytest
 
-from accounts.factories import AccountFactory
-from ..factories import StockFactory
-from ..serializers import StockSerializer
+
+@pytest.mark.django_db
+def test_stock_list(authenticated):
+    client = authenticated
+    url = reverse('stocks:stock-list')
+    response = client.get(url)
+    assert response.status_code == 200
 
 
-class TestStockList(APITestCase):
+@pytest.mark.django_db
+def test_stock_buy(authenticated):
+    client = authenticated
+    url = reverse('stocks:stock-buy', kwargs={'symbol': 'ZOOM', 'shares': 1000})
+    response = client.post(url)
+    assert response.status_code == 201
 
-    @pytest.mark.django_db
-    def test_stock_list(self):
-        user = self.client.post('http://127.0.0.1:8000/auth/users/', data={"first_name": "iyanu",
-                                                                    "last_name": "ajao",
-                                                                    "email": "iyanu@example.com",
-                                                                    "password": "decagon1234"})
 
-        response = self.client.post('http://127.0.0.1:8000/auth/token/login/', data={"password": "decagon1234",
-                                                                              "email": "iyanu@example.com"})
-        auth_token = response.data['auth_token']
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + auth_token)
-        url = reverse('stocks:stock-list')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+@pytest.mark.django_db
+def test_stock_sell(authenticated):
+    client = authenticated
+    url = reverse('stocks:stock-sell', kwargs={'id': 1, 'shares': 100})
+    response = client.post(url)
+    assert response.status_code == 204
 
-    # @pytest.mark.django_db
-    # def test_stock_buy(self):
-    #     user = self.client.post('http://127.0.0.1:8000/auth/users/', data={"first_name": "iyanu",
-    #                                                                 "last_name": "ajao",
-    #                                                                 "email": "iyanu@example.com",
-    #                                                                 "password": "decagon1234"})
-    #
-    #     response = self.client.post('http://127.0.0.1:8000/auth/token/login/', data={"password": "decagon1234",
-    #                                                                           "email": "iyanu@example.com"})
-    #     auth_token = response.data['auth_token']
-    #     self.client.credentials(HTTP_AUTHORIZATION='Token ' + auth_token)
-    #
-    #     url = reverse('stocks:stock-buy', kwargs={'symbol': 'ZOOM', 'shares': 1000})
-    #     # account = AccountFactory()
-    #     # stock = StockFactory(owner=account)
-    #     # # # data = StockSerializer(data=stock)
-    #     response = self.client.post(url)
-    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-    # @pytest.mark.django_db
-    # def test_stock_sell(self):
-    #     user = self.client.post('http://127.0.0.1:8000/auth/users/', data={"first_name": "iyanu",
-    #                                                                 "last_name": "ajao",
-    #                                                                 "email": "iyanu@example.com",
-    #                                                                 "password": "decagon1234"})
-    #
-    #     response = self.client.post('http://127.0.0.1:8000/auth/token/login/', data={"password": "decagon1234",
-    #                                                                           "email": "iyanu@example.com"})
-    #     auth_token = response.data['auth_token']
-    #     self.client.credentials(HTTP_AUTHORIZATION='Token ' + auth_token)
-    #     account = AccountFactory()
-    #     stock = StockFactory(owner=account)
-    #     url = reverse('stocks:stock-sell', kwargs={'id': 1, 'shares': 100})
-    #     response = self.client.put(url)
-    #     self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
-
-    # @pytest.mark.django_db
-    # def test_stock_search(self):
-    #     user = self.client.post('http://127.0.0.1:8000/auth/users/', data={"first_name": "iyanu",
-    #                                                                 "last_name": "ajao",
-    #                                                                 "email": "iyanu@example.com",
-    #                                                                 "password": "decagon1234"})
-    #
-    #     response = self.client.post('http://127.0.0.1:8000/auth/token/login/', data={"password": "decagon1234",
-    #                                                                           "email": "iyanu@example.com"})
-    #     auth_token = response.data['auth_token']
-    #     self.client.credentials(HTTP_AUTHORIZATION='Token ' + auth_token)
-    #
-    #     url = reverse('stocks:stock-search', kwargs={'symbol': 'ZOOM'})
-    #     response = self.client.get(url)
-    #     self.assertEqual(response.status_code, status.HTTP_200_OK)
+@pytest.mark.django_db
+def test_stock_search(authenticated):
+    client = authenticated
+    url = reverse('stocks:stock-search', kwargs={'symbol': 'ZOOM'})
+    response = client.get(url)
+    assert response.status_code == 200
