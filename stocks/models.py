@@ -38,14 +38,14 @@ class Stock(models.Model):
         self.unit_price = current_price
         self.total_price = self.unit_price * self.shares
         self.save()
-        return f'{self.shares} left'
+        return self.shares
 
     def add_more(self, units, current_price):
         self.shares = int(self.shares) + units
         self.unit_price = current_price
         self.total_price = self.unit_price * self.shares
         self.save()
-        return f'{self.shares} left'
+        return self.shares
 
 
 class Search:

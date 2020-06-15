@@ -15,6 +15,8 @@ def test_stock_model():
     assert stock.unit_price == 50
     assert stock.shares == 1000
     assert stock.total_price == 50000
+    assert stock.sell(50, 50) == 950
+    assert stock.add_more(100, 50) == 1050
 
 
 @pytest.mark.django_db
