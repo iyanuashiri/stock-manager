@@ -9,7 +9,7 @@ dj-database-url==0.5.0
 Django==2.2.13
 django-cors-headers==3.1.0
 django-templated-mail==1.1.1
-djangorestframework==3.10.3
+djangorestframework==3.11.2
 djoser==2.0.3
 drf-yasg==1.16.1
 factory-boy==2.12.0
